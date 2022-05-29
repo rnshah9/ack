@@ -1,0 +1,6 @@
+project: rnshah9/ack
+target: ack
+tests: null
+
+cmds:
+  - cmd: /usr/local/bin/astrip @@
