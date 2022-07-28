@@ -6,13 +6,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y bison flex build-essential
 COPY . /repo
 WORKDIR /repo
 RUN make -j8
-RUN make install
-
-RUN mkdir -p /deps
-RUN ldd /usr/local/bin/astrip | tr -s '[:blank:]' '\n' | grep '^/' | xargs -I % sh -c 'cp % /deps;'
+RUN make install PREFIX=/install
 
 FROM ubuntu:22.04 as package
-
-COPY --from=builder /deps /deps
-COPY --from=builder /usr/local/bin/astrip /usr/local/bin/astrip
-ENV LD_LIBRARY_PATH=/deps
+COPY --from=builder /install /install
