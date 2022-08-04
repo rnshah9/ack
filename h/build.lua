@@ -3,8 +3,7 @@ normalrule {
 	ins = {},
 	outleaves = { "em_path.h" },
 	commands = {
-		"echo '#define TMP_DIR \"/tmp\"' > %{outs}",
-		"echo '#define EM_DIR \"$(PREFIX)\"' >> %{outs}",
+		"echo '#define EM_DIR \"$(PREFIX)\"' > %{outs}",
 		"echo '#define ACK_PATH \"share/ack/descr\"' >> %{outs}",
 	}
 }
@@ -24,7 +23,23 @@ normalrule {
 clibrary {
 	name = "emheaders",
 	hdrs = {
-		"./*.h",
+		"./arch.h",
+		"./as_spec.h",
+		"./cgg_cg.h",
+		"./cg_pattern.h",
+		"./em_abs.h",
+		"./em_ego.h",
+		"./em_flag.h",
+		"./em_mes.h",
+		"./em_ptyp.h",
+		"./em_reg.h",
+		"./ip_spec.h",
+		"./ocm_chan.h",
+		"./ocm_parco.h",
+		"./ocm_proc.h",
+		"./out.h",
+		"./ranlib.h",
+		"./stb.h",
 		"./con_float",
 		"+em_path",
 		"+local",

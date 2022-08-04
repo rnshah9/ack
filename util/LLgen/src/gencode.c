@@ -20,6 +20,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 # include "types.h"
 # include "io.h"
 # include "extern.h"
@@ -1509,5 +1510,11 @@ STATIC void correct_prefix(void)
 		fprintf(f, "#define LLstartsymb %sstartsymb\n", s);
 #endif
 	}
-	fprintf(f, "#include \"%s\"\n", f_include);
+
+	string leaf = strrchr(f_include, '/');
+	if (leaf)
+		leaf++;
+	else
+		leaf = f_include;
+	fprintf(f, "#include \"%s\"\n", leaf);
 }

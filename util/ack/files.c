@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "system.h"
 #include "ack.h"
 #include "list.h"
 #include "trans.h"
@@ -24,18 +25,6 @@ static char *add_u(int part, char *ptr) {
 	}
 	*ptr= part%26 + 'a' ;
 	return ptr+1 ;
-}
-
-static char *unique(void) {
-	/* Get the next unique part of the internal filename */
-	static int u_next = 0 ;
-	static char buf[10] ;
-	register char *ptr ;
-
-	ptr=add_u(u_next,buf) ;
-	*ptr=0 ;
-	u_next++ ;
-	return buf ;
 }
 
 int setfiles(trf *phase) {
@@ -64,27 +53,23 @@ int setfiles(trf *phase) {
 		out.p_keeps=NO ;
 		out.p_keep=YES ;
 	} else {
-		gr_init(&pathname) ;
 		if ( !phase->t_keep && !t_flag ) {
-			gr_cat(&pathname,TMP_DIR) ;
-			gr_cat(&pathname,"/") ;
-			gr_cat(&pathname,template) ;
-			gr_cat(&pathname,unique()) ;
+			out.p_path = sys_maketempfile("ack", phase->t_out);
 			out.p_keep=NO ;
 		} else {
+			gr_init(&pathname) ;
 			if ( !p_basename ) {
 				gr_cat(&pathname,"Ack") ;
-				gr_cat(&pathname,unique()) ;
 				p_basename=keeps(gr_start(pathname)) ;
 				werror("Output written on %s%s",
 					p_basename,phase->t_out) ;
 			} else {
 				gr_cat(&pathname,p_basename) ;
 			}
+			gr_cat(&pathname,phase->t_out) ;
+			out.p_path= gr_final(&pathname) ;
 			out.p_keep=YES ;
 		}
-		gr_cat(&pathname,phase->t_out) ;
-		out.p_path= gr_final(&pathname) ;
 		out.p_keeps= YES ;
 	}
 	scanlist( l_first(arguments), elem) {
