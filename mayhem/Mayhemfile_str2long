@@ -1,0 +1,6 @@
+project: ack
+target: str2long
+
+cmds:
+  - cmd: /fuzz_str2long
+    libfuzzer: true
